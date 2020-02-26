@@ -1,0 +1,36 @@
+@import "colorScheme";
+@import "itemTypeColors";
+
+.camera-view {
+	.camera-view__part {
+        h3 {
+            font-size:1em; 
+            margin:0; 
+            padding:0;
+            clear:left;
+        }
+
+        .camera-view-labels {
+            float:left;
+            width:20%;
+			.camera-view__piece__header {
+                height: 2em;
+				@include item-type-colors();
+            }
+        }
+
+        .camera-view-timeline {
+            float:left;
+            width:60%;
+            position:relative;
+			height: 2em;
+			
+			.camera-view__piece__timeline-element {
+                position:absolute;
+                opacity: 0.5;
+                height: 2em;
+				@include item-type-colors();
+			}
+		}
+	}
+}

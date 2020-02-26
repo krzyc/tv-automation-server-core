@@ -25,6 +25,7 @@ import { RundownList } from './RundownList'
 import { RundownView } from './RundownView'
 import { ActiveRundownView } from './ActiveRundownView'
 import { ClockView } from './ClockView'
+import { CameraView } from './Camera/CameraView'
 import { ConnectionStatusNotification } from './ConnectionStatusNotification'
 import {
   BrowserRouter as Router,
@@ -121,6 +122,7 @@ class App extends React.Component<InjectedI18nProps, IAppState> {
 						<Switch>
 							<Route path='/rundown/:rundownId' component={NullComponent} />
 							<Route path='/countdowns/:studioId/presenter' component={NullComponent} />
+							<Route path='/countdowns/:studioId/camera/:studioLabel' component={NullComponent} />
 							<Route path='/countdowns/presenter' component={NullComponent} />
 							<Route path='/activeRundown' component={NullComponent} />
 							<Route path='/prompter/:studioId' component={NullComponent} />
@@ -137,6 +139,7 @@ class App extends React.Component<InjectedI18nProps, IAppState> {
 							<Route path='/activeRundown/:studioId' component={ActiveRundownView} />
 							<Route path='/prompter/:studioId' component={PrompterView} />
 							<Route path='/countdowns/:studioId/presenter' component={ClockView} />
+							<Route path='/countdowns/:studioId/camera/:studioLabel' component={CameraView} />
 							<Route path='/status' component={Status} />
 							<Route path='/settings' component={Settings} />
 							<Route path='/testTools' component={TestTools} />
@@ -147,6 +150,7 @@ class App extends React.Component<InjectedI18nProps, IAppState> {
 						<Switch>
 							{/* Put views that should NOT have the Notification center here: */}
 							<Route path='/countdowns/:studioId/presenter' component={NullComponent} />
+							<Route path='/countdowns/:studioId/camera/:studioLabel' component={NullComponent} />
 							<Route path='/countdowns/presenter' component={NullComponent} />
 							<Route path='/prompter/:studioId' component={NullComponent} />
 
