@@ -123,47 +123,55 @@ export const CameraSegmentContainer = withTracker<IProps, IState, ITrackedProps>
 
 	return false
 })(class extends MeteorReactComponent<IProps & ITrackedProps, IState> {
+	renderPart (part: PartUi) {
+		let labels:JSX.Element[] = []
+		let timelineItems:JSX.Element[] = []
+		
+		part.pieces
+			.filter(piece => piece.sourceLayer && piece.sourceLayer.onPresenterScreen)
+			.forEach(piece => {
+				labels.push(
+					<div
+						className={ClassNames(
+							'camera-view__piece__header', 
+							piece.sourceLayer && RundownUtils.getSourceLayerClassName(piece.sourceLayer.type)
+						)}
+						style={{backgroundColor: 'blue'}}
+					>
+						{(piece.sourceLayer && piece.sourceLayer.type === SourceLayerType.CAMERA && (piece.content as CameraContent).studioLabel) || piece.name}
+					</div>
+				)
+				timelineItems.push(
+					<div
+						className={ClassNames(
+							'camera-view__piece__timeline-element', 
+							piece.sourceLayer && RundownUtils.getSourceLayerClassName(piece.sourceLayer.type))
+						}
+						style={{
+							left: ((part.startsAt+(piece.renderedInPoint || 0))*this.props.timeScale)+'px', 
+							width: ((piece.renderedDuration || part.expectedDuration || 0)*this.props.timeScale)+'px',
+							backgroundColor: 'blue'
+						}}
+					>
+					</div>
+				)
+			}
+		)
+		return <div className="camera-view__part" style={{padding: '10px', backgroundColor: 'red'}}>
+			<h3>{part.startsAt} / {part.expectedDuration} - {part.autoNext ? 'autoNext' : ''}</h3>
+			<div className="camera-view-labels">
+				{labels}
+			</div>
+			<div className="camera-view-timeline">
+				{timelineItems}
+			</div>
+		</div>
+	}
+
 	render () {
 		return <>
 			<h2>Segment: {this.props.segmentui && this.props.segmentui.name}</h2>
-			<div>{this.props.parts.map(part => 
-				<div className="camera-view__part" style={{padding: '10px', backgroundColor: 'red'}}>
-					<h3>{part.startsAt} / {part.expectedDuration} - {part.autoNext ? 'autoNext' : ''}</h3>
-                    <div className="camera-view-labels">
-                        {part.pieces
-                            .filter(piece => piece.sourceLayer && piece.sourceLayer.onPresenterScreen)
-                            .map(piece =>
-                            <div
-                                className={ClassNames(
-                                    'camera-view__piece__header', 
-                                    piece.sourceLayer && RundownUtils.getSourceLayerClassName(piece.sourceLayer.type)
-                                )}
-                                style={{backgroundColor: 'blue'}}
-                            >
-                                {(piece.sourceLayer && piece.sourceLayer.type === SourceLayerType.CAMERA && (piece.content as CameraContent).studioLabel) || piece.name}
-                            </div>
-                        )}
-                    </div>
-                    <div className="camera-view-timeline">
-                        {part.pieces
-                            .filter(piece => piece.sourceLayer && piece.sourceLayer.onPresenterScreen)
-                            .map(piece =>
-                            <div
-                                className={ClassNames(
-                                    'camera-view__piece__timeline-element', 
-                                    piece.sourceLayer && RundownUtils.getSourceLayerClassName(piece.sourceLayer.type))
-                                }
-                                style={{
-                                    left: ((part.startsAt+(piece.renderedInPoint || 0))*this.props.timeScale)+'px', 
-                                    width: ((piece.renderedDuration || part.expectedDuration || 0)*this.props.timeScale)+'px',
-                                    backgroundColor: 'blue'
-                                }}
-                            >
-                            </div>
-                        )}
-                    </div>
-				</div>	
-			)}</div>
+			<div>{this.props.parts.map(part => this.renderPart(part))}</div>
 		</>
 	}
 })
